@@ -35,9 +35,8 @@ int main() {
     case 5:
       teams_playing = select_teams(teams);
       play(teams_playing);
-      // show_results(play(teams));
     case 6:
-      // show_teams(teams);
+      show_teams(teams);
       break;
     }
   }
