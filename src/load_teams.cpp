@@ -5,54 +5,51 @@
 #include <vector>
 
 const std::vector<std::string> messages = {
-    "\nNumero del Equipo:", "\nPais: ", "\nNombre Capitan del Equipo: ",
-    "\nCantidad de Medallas Olimpicas: "};
+    "\nNumero del Equipo:", "\nNombre del Equipo: ", "\nPais: ",
+    "\nNombre Capitan del Equipo: ", "\nCantidad de Medallas Olimpicas: "};
 
-int get_team_number(std::map<int, bool> &teams_numbers) {
-  int team_number = -1;
-  while (!teams_numbers.at(team_number)) {
+int search_team_id(std::vector<Team> &teams, int id) {
+  for (int i = 0; i < teams.size(); i++) {
+    if (teams[i].team_number == id) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int get_team_id(std::vector<Team> &teams) {
+  int id;
+  std::cout << messages[0] << '\n';
+  std::cin >> id;
+  while (search_team_id(teams, id) != -1) {
     std::cout << "\nEste equipo ya esta registrado!!\n";
     std::cout << messages[0];
-    std::cin >> team_number;
+    std::cin >> id;
   }
-  teams_numbers.at(team_number) = true;
-  return team_number;
+  return id;
 }
 
-std::string get_team_country() {
+std::vector<Team> load_team(std::vector<Team> teams) {
+
+  int id = get_team_id(teams);
+
+  std::cout << messages[1];
+  std::string name;
+  std::cin >> name;
+
   std::string country;
-  while (!country.empty()) {
-    std::cout << messages[1];
-    std::cin >> country;
-  }
-  return country;
-}
+  std::cout << messages[2];
+  std::cin >> country;
 
-std::string get_team_captain() {
-  std::string team_captain;
-  while (!team_captain.empty()) {
-    std::cout << messages[2];
-    std::cin >> team_captain;
-  }
-  return team_captain;
-}
+  std::string captain;
+  std::cout << messages[3];
+  std::cin >> captain;
 
-int get_medals() {
   int medals;
-  while (medals < 0) {
-    std::cout << messages[3];
-    std::cin >> medals;
-  }
-  return medals;
-}
+  std::cout << messages[4];
+  std::cin >> medals;
 
-Team load_team(std::vector<Team> &teams, std::map<int, bool> &teams_numbers) {
-
-  Team new_team{
-      get_team_number(teams_numbers),
-      get_team_country(),
-      get_team_captain(),
-      get_medals(),
-  };
-  return new_team;
+  Team new_team{id, name, country, captain, medals};
+  teams.push_back(new_team);
+  return teams;
 }

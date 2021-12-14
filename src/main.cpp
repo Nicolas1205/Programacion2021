@@ -1,10 +1,10 @@
-#include "./exit.h"
 #include "./list_players.h"
 #include "./list_teams.h"
 #include "./load_players.h"
 #include "./load_teams.h"
 #include "./play.h"
 #include "./show_menus.h"
+#include "./show_teams.h"
 
 #include <algorithm>
 #include <iostream>
@@ -13,29 +13,31 @@
 int main() {
   int option;
   std::vector<Team> teams;
-  std::pair<Team, Team> teams_playing;
-  std::map<int, bool> teams_numbers;
-  std::vector<int> v(10, 0);
-  Results results;
+  std::vector<Team> teams_playing;
+  std::vector<int> players_ids;
 
   while (option != 6) {
     show_main_menu();
     std::cin >> option;
     switch (option) {
     case 1:
-      load_team(teams, teams_numbers);
+      teams = load_team(teams);
+      break;
     case 2:
-      // load_players(teams, search_team);
+      load_player(teams, players_ids);
+      break;
     case 3:
-      // list_teams(teams);
+      list_teams(teams);
+      break;
     case 4:
-      // list_players(teams);
+      list_players(teams);
+      break;
     case 5:
-      // teams_playing = select_teams(teams);
-      // results = play(teams);
+      teams_playing = select_teams(teams);
+      play(teams_playing);
       // show_results(play(teams));
     case 6:
-      // exit(results);
+      // show_teams(teams);
       break;
     }
   }

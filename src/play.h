@@ -10,8 +10,8 @@ typedef struct Results {
   int total_points;
 } Results;
 
-std::pair<Team, Team> select_teams(std::vector<Team> &teams);
+std::vector<Team> select_teams(std::vector<Team> &teams);
 
-Results play(std::pair<Team, Team> teams_playing);
+void play(std::vector<Team> teams_playing);
 
 #endif
