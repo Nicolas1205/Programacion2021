@@ -1,7 +1,8 @@
 #include "./load_teams.h"
 #include "./teams.h"
+#include <algorithm>
 #include <iostream>
-#include <map>
+#include <regex>
 #include <string>
 #include <vector>
 
@@ -9,15 +10,21 @@ const std::vector<std::string> messages = {
     "\nNumero de Jugador: ", "\nNombre: ",           "\nApellido: ",
     "\nNacimiento: ",        "\nNumero de Equipo: ", "\nPosicion: "};
 
-int seach_player_id(std::vector<int> &players_ids, int id) {
+bool comp_players(std::pair<int, Player> a, std::pair<int, Player> b) {
+  if (a.first > b.first)
+    return 1;
+  return 0;
+}
+
+int seach_player_id(std::vector<std::pair<int, Player>> &players_ids, int id) {
   for (int i = 0; i < players_ids.size(); i++) {
-    if (players_ids[i] == id)
+    if (players_ids[i].first == id)
       return i;
   }
   return -1;
 }
 
-int get_id(std::vector<int> &players_ids) {
+int get_id(std::vector<std::pair<int, Player>> &players_ids) {
   int id;
   std::cout << messages[0];
   std::cin >> id;
@@ -28,16 +35,6 @@ int get_id(std::vector<int> &players_ids) {
     std::cin >> id;
   }
   return id;
-}
-
-std::string get_birth() {
-  // TODO: Make  a regex for this
-  std::string birth;
-  while (!birth.empty()) {
-    std::cout << messages[3];
-    std::cin >> birth;
-  }
-  return birth;
 }
 
 std::pair<int, int> get_teams_id(std::vector<Team> teams) {
@@ -53,7 +50,36 @@ std::pair<int, int> get_teams_id(std::vector<Team> teams) {
   return {id, pos};
 }
 
-void load_player(std::vector<Team> &teams, std::vector<int> &players_ids) {
+std::string get_birth() {
+  std::cout << messages[3];
+  std::string birth;
+  std::cin >> birth;
+  std::regex birth_pattern(
+      "^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$");
+
+  while (std::regex_match(birth, birth_pattern)) {
+    std::cout << "El formato de entrada debe de ser mm/dd/yyyy\n";
+    std::cout << messages[3];
+    std::cin >> birth;
+  }
+  return birth;
+}
+
+std::string get_position() {
+  std::cout << messages[5];
+  std::string position;
+  std::cin >> position;
+  while (position != "titular") {
+    std::cout
+        << "El campo debe ser completado, ya sea con titular o suplente\n";
+    std::cout << messages[5];
+    std::cin >> position;
+  }
+  return position;
+}
+
+void load_player(std::vector<Team> &teams,
+                 std::vector<std::pair<int, Player>> &players_ids) {
 
   int id = get_id(players_ids);
 
@@ -65,13 +91,8 @@ void load_player(std::vector<Team> &teams, std::vector<int> &players_ids) {
   std::string last_name;
   std::cin >> last_name;
 
-  std::cout << messages[3];
-  std::string birth;
-  std::cin >> birth;
-
-  std::cout << messages[5];
-  std::string position;
-  std::cin >> position;
+  std::string birth = get_birth();
+  std::string position = get_position();
 
   auto [team_id, pos] = get_teams_id(teams);
 
@@ -80,5 +101,6 @@ void load_player(std::vector<Team> &teams, std::vector<int> &players_ids) {
   };
 
   teams[pos].players.push_back(new_player);
-  players_ids.push_back(id);
+  players_ids.push_back({id, new_player});
+  sort(players_ids.begin(), players_ids.end(), comp_players);
 }

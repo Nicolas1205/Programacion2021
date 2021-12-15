@@ -12,6 +12,8 @@ typedef struct Results {
 
 std::vector<Team> select_teams(std::vector<Team> &teams);
 
-void play(std::vector<Team> teams_playing);
+void show_match_results(std::vector<SetResults> match_results);
+
+std::vector<SetResults> play(std::vector<Team> teams_playing);
 
 #endif

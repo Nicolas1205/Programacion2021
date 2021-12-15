@@ -7,6 +7,7 @@
 
 #define LOAD_PLAYERS
 
-void load_player(std::vector<Team> &teams, std::vector<int> &players_ids);
+void load_player(std::vector<Team> &teams,
+                 std::vector<std::pair<int, Player>> &players_ids);
 
 #endif

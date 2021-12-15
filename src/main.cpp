@@ -13,8 +13,9 @@
 int main() {
   int option;
   std::vector<Team> teams;
-  std::vector<Team> teams_playing;
-  std::vector<int> players_ids;
+  std::vector<Team> teams_playing(2);
+  std::vector<std::pair<int, Player>> players_ids;
+  std::vector<bool> options_loaded(5, false);
 
   while (option != 6) {
     show_main_menu();
@@ -22,22 +23,42 @@ int main() {
     switch (option) {
     case 1:
       teams = load_team(teams);
+      options_loaded[0] = true;
       break;
     case 2:
-      load_player(teams, players_ids);
+      if (options_loaded[0]) {
+        load_player(teams, players_ids);
+        options_loaded[1] = true;
+      }
       break;
     case 3:
-      list_teams(teams);
+      if (teams.size() >= 2) {
+        list_teams(teams);
+        options_loaded[2] = true;
+      }
       break;
     case 4:
-      list_players(teams);
+      if (options_loaded[1]) {
+        list_players(players_ids);
+        options_loaded[3] = true;
+      }
       break;
     case 5:
-      teams_playing = select_teams(teams);
-      play(teams_playing);
+      // Todas las demas opciones cargadas
+      if (std::any_of(options_loaded.begin(), options_loaded.end() - 1,
+                      [](bool option) { return option; })) {
+        teams_playing = select_teams(teams);
+        std::vector<SetResults> results = play(teams_playing);
+        show_match_results(results);
+        options_loaded[4] = true;
+      }
+
     case 6:
-      show_teams(teams);
-      break;
+      if (options_loaded[4]) {
+        show_teams(teams);
+        break;
+      }
+      option = 0;
     }
   }
 }

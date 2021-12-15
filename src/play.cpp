@@ -30,7 +30,7 @@ std::vector<Team> select_teams(std::vector<Team> &teams) {
   return teams_playing;
 }
 
-SetResults play_set(std::vector<Team> teams_playing, int number_set) {
+SetResults play_set(std::vector<Team> &teams_playing, int number_set) {
   srand(time(NULL));
   std::cout << "******** Se esta Jugando el Set " << number_set + 1
             << "********\n";
@@ -64,14 +64,7 @@ SetResults play_set(std::vector<Team> teams_playing, int number_set) {
   return set_results;
 }
 
-void play(std::vector<Team> teams_playing) {
-  std::vector<SetResults> match_results;
-  for (int number_set = 0; number_set < TOTAL_SETS;
-       number_set++) { // Empieza el juego
-    SetResults set_results = play_set(teams_playing, number_set);
-    match_results.push_back(set_results);
-  }
-
+void show_match_results(std::vector<SetResults> match_results) {
   for (int i = 0; i < TOTAL_SETS; i++) {
     std::cout << "************* RESULTADOS FINALES *************\n";
     std::cout << "************* SET " << i + 1 << " **************\n";
@@ -82,4 +75,15 @@ void play(std::vector<Team> teams_playing) {
       std::cout << "Fue un empate\n";
     }
   }
+}
+
+std::vector<SetResults> play(std::vector<Team> teams_playing) {
+  std::vector<SetResults> match_results;
+  // Empieza el juego
+  for (int number_set = 0; number_set < TOTAL_SETS; number_set++) {
+    SetResults set_results = play_set(teams_playing, number_set);
+    match_results.push_back(set_results);
+  }
+
+  return match_results;
 }

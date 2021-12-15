@@ -4,13 +4,24 @@
 #include <iostream>
 #include <vector>
 
-void show_players(Team team) {
-  std::cout << "Numero de Equipo: " << team.team_number << '\n';
-  for (int i = 0; i < team.players.size(); i++) {
-    std::cout << "Nombre del Jugador: " << team.players[i].name << '\n';
-  }
+bool comp(std::pair<int, Player> a, std::pair<int, Player> b) {
+  if (a.first > b.first)
+    return 1;
+  return 0;
 }
 
-void list_players(std::vector<Team> &teams) {
-  for_each(teams.begin(), teams.end(), show_players);
+void show_players(std::pair<int, Player> player) {
+  std::cout << "******* Jugadores Ordenados Por Id *********\n";
+  std::cout << "Id: " << player.second.player_number << '\n';
+  std::cout << "Nombre: " << player.second.name << '\n';
+  std::cout << "Apellido: " << player.second.last_name << '\n';
+  std::cout << "Fecha de Nacimiento: " << player.second.birth << '\n';
+  std::cout << "Numero de Equipo: " << player.second.team_number << '\n';
+  std::cout << "*****************************************\n";
+}
+
+void list_players(std::vector<std::pair<int, Player>> players_ids) {
+
+  sort(players_ids.begin(), players_ids.end(), comp);
+  for_each(players_ids.begin(), players_ids.end(), show_players);
 }

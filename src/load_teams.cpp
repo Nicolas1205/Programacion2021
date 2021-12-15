@@ -1,11 +1,12 @@
 #include "load_teams.h"
 #include "teams.h"
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <vector>
 
 const std::vector<std::string> messages = {
-    "\nNumero del Equipo:", "\nNombre del Equipo: ", "\nPais: ",
+    "\nNumero del Equipo: ", "\nNombre del Equipo: ", "\nPais: ",
     "\nNombre Capitan del Equipo: ", "\nCantidad de Medallas Olimpicas: "};
 
 int search_team_id(std::vector<Team> &teams, int id) {
@@ -19,7 +20,7 @@ int search_team_id(std::vector<Team> &teams, int id) {
 
 int get_team_id(std::vector<Team> &teams) {
   int id;
-  std::cout << messages[0] << '\n';
+  std::cout << messages[0];
   std::cin >> id;
   while (search_team_id(teams, id) != -1) {
     std::cout << "\nEste equipo ya esta registrado!!\n";
@@ -27,6 +28,12 @@ int get_team_id(std::vector<Team> &teams) {
     std::cin >> id;
   }
   return id;
+}
+
+bool comp_teams(Team a, Team b) {
+  if (a.olympic_medals > b.olympic_medals)
+    return 1;
+  return 0;
 }
 
 std::vector<Team> load_team(std::vector<Team> teams) {
@@ -51,5 +58,8 @@ std::vector<Team> load_team(std::vector<Team> teams) {
 
   Team new_team{id, name, country, captain, medals};
   teams.push_back(new_team);
+
+  sort(teams.begin(), teams.end(), comp_teams);
+
   return teams;
 }
