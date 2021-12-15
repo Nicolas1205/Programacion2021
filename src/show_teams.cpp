@@ -3,7 +3,10 @@
 #include <algorithm>
 #include <iostream>
 
-void show_teams_names(Team team) { std::cout << team.name << '\n'; }
+void show_teams_names(Team team) {
+  std::cout << "********** Gracias por participar ********\n";
+  std::cout << "Equipo: " << team.name << '\n';
+}
 
 void show_teams(std::vector<Team> teams) {
   std::cout << "Gracias por participar: \n";

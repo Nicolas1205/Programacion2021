@@ -16,6 +16,7 @@ int main() {
   std::vector<Team> teams_playing(2);
   std::vector<std::pair<int, Player>> players_ids;
   std::vector<bool> options_loaded(5, false);
+  int count_titulars = 0;
 
   while (option != 6) {
     show_main_menu();

@@ -60,7 +60,10 @@ SetResults play_set(std::vector<Team> &teams_playing, int number_set) {
   bool is_draw =
       teams_playing[0].points_won == teams_playing[1].points_won ? true : false;
 
+  teams_playing[0].points_won = 0;
+  teams_playing[1].points_won = 0;
   SetResults set_results{number_set, winner, looser, is_draw};
+
   return set_results;
 }
 
